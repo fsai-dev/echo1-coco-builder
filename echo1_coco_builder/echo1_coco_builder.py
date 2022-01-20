@@ -42,6 +42,7 @@ class CocoBuilderSchema(Schema):
     info = fields.Nested(InfoSchema)
     images = fields.List(fields.Nested(ImageSchema))
     annotations = fields.List(fields.Nested(AnnotationSchema))
+    categories = fields.List(fields.Nested(CategorySchema))
 
 
 ################

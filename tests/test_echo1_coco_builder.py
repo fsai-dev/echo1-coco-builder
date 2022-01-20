@@ -75,6 +75,7 @@ def test_builder():
         assert len(annotation["segmentation"]) == 0
 
     # categories assertion
+    assert len(coco_builder.categories) == 2
     for category in coco_builder.categories:
         assert type(category["id"]) is int
         assert type(category["name"]) is str
