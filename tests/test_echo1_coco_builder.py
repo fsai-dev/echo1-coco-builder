@@ -23,7 +23,7 @@ def test_builder():
         image_id = int(re.sub("[^0-9]", "", row["image_name"]))
 
         # image_name must be a string
-        image_name = row["image_name"]
+        file_name = row["image_name"]
 
         # image_width and image_height must be an integer
         image_width = row["image_width"]
@@ -39,7 +39,7 @@ def test_builder():
         bbox = row["bbox"].split(",")
 
         # add a new image
-        coco_builder.add_image(image_id, image_name, image_width, image_height)
+        coco_builder.add_image(image_id, file_name, image_width, image_height, "MIT")
 
         # add a new category
         coco_builder.add_category(category_id, category_name)
@@ -50,15 +50,20 @@ def test_builder():
         )
 
     # add info
-    coco_builder.add_info(2022, "v1.0", "Echo1")
+    coco_builder.add_info(
+        2022, "v1.0", "Echo1", "Contact for more info.", "https://echo1.io"
+    )
 
     # images assertion
     assert len(coco_builder.images) == 2
     for image in coco_builder.images:
         assert type(image["id"]) is int
-        assert type(image["image_name"]) is str
-        assert type(image["height"]) is int
         assert type(image["width"]) is int
+        assert type(image["height"]) is int
+        assert type(image["file_name"]) is str
+        assert type(image["license"]) is str
+        assert type(image["flickr_url"]) is str
+        assert type(image["coco_url"]) is str
 
     # annotations assertion
     assert len(coco_builder.annotations) == 5
@@ -75,6 +80,13 @@ def test_builder():
         assert type(category["name"]) is str
 
     # info assertion
-    assert coco_builder.info["version"] == "v1.0"
+    assert type(coco_builder.info["year"]) is int
     assert coco_builder.info["year"] == 2022
+    assert type(coco_builder.info["version"]) is str
+    assert coco_builder.info["version"] == "v1.0"
+    assert type(coco_builder.info["description"]) is str
+    assert coco_builder.info["description"] == "Contact for more info."
+    assert type(coco_builder.info["contributor"]) is str
     assert coco_builder.info["contributor"] == "Echo1"
+    assert type(coco_builder.info["url"]) is str
+    assert coco_builder.info["url"] == "https://echo1.io"

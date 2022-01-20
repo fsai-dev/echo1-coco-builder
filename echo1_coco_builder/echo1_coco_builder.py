@@ -1,55 +1,62 @@
+from __future__ import annotations
 import json, re
 from marshmallow import Schema, fields
-
-
-def obj_dict(obj):
-    return obj.__dict__
 
 
 ##########
 ### Schema
 ##########
 class ImageSchema(Schema):
-    id = fields.Int()
-    image_name = fields.Str()
-    width = fields.Int()
-    height = fields.Int()
+    id = fields.Int(required=True)
+    file_name = fields.Str(required=True)
+    width = fields.Int(required=True)
+    height = fields.Int(required=True)
+    license = fields.Str()
+    flickr_url = fields.Str()
+    coco_url = fields.Str()
 
 
 class CategorySchema(Schema):
-    id = fields.Int()
-    name = fields.Str()
+    id = fields.Int(required=True)
+    name = fields.Str(required=True)
 
 
 class InfoSchema(Schema):
     year = fields.Int()
     version = fields.Str()
     contributor = fields.Str()
+    description = fields.Str()
+    url = fields.Str()
 
 
 class AnnotationSchema(Schema):
-    id = fields.Int()
-    image_id = fields.Int()
-    category_id = fields.Int()
+    id = fields.Int(required=True)
+    image_id = fields.Int(required=True)
+    category_id = fields.Int(required=True)
     bbox = fields.List(fields.Int)
     segmentation = fields.List(fields.Int)
     iscrowd = fields.Int()
     area = fields.Float()
 
 
-class CocoSchema(Schema):
-    images = fields.Nested(ImageSchema())
+class CocoBuilderSchema(Schema):
+    info = fields.Nested(InfoSchema)
+    images = fields.List(fields.Nested(ImageSchema))
+    annotations = fields.List(fields.Nested(AnnotationSchema))
 
 
 ################
 ### Coco Classes
 ################
 class CocoImage:
-    def __init__(self, id, image_name, width, height):
+    def __init__(self, id, file_name, width, height, license, flickr_url, coco_url):
         self.width = width
         self.height = height
         self.id = id
-        self.image_name = image_name
+        self.file_name = file_name
+        self.license = license
+        self.flickr_url = flickr_url
+        self.coco_url = coco_url
 
 
 class CocoCategory:
@@ -59,10 +66,12 @@ class CocoCategory:
 
 
 class CocoInfo:
-    def __init__(self, year, version, contributor):
+    def __init__(self, year, version, contributor, description, url):
         self.year = year
         self.version = version
         self.contributor = contributor
+        self.description = description
+        self.url = url
 
 
 class CocoAnnotation:
@@ -93,10 +102,12 @@ class CocoBuilder:
         result = schema.dump(annotation)
         self.annotations.append(result)
 
-    def add_image(self, id, image_name, width, height):
+    def add_image(
+        self, id, file_name, width, height, license="", flickr_url="", coco_url=""
+    ):
 
         # Validate the image schema
-        image = CocoImage(id, image_name, width, height)
+        image = CocoImage(id, file_name, width, height, license, flickr_url, coco_url)
         schema = ImageSchema()
         result = schema.dump(image)
 
@@ -121,14 +132,15 @@ class CocoBuilder:
         # Add to the categories list if it does not exist
         self.categories.append(result)
 
-    def add_info(self, year, version, contributor):
-        info = CocoInfo(year, version, contributor)
+    def add_info(self, year, version, contributor, description, url):
+        info = CocoInfo(year, version, contributor, description, url)
         schema = InfoSchema()
         result = schema.dump(info)
         self.info = result
 
     def get(self):
-        return str(self)
+        schema = CocoBuilderSchema()
+        return schema.dumps(self)
 
     def __str__(self):
-        return json.dumps(self, default=obj_dict)
+        return self.get()

@@ -30,7 +30,7 @@ for annotation_id, row in df.iterrows():
     image_id = row["image_name"]
 
     # image_name must be a string
-    image_name = row["image_name"]
+    file_name = row["image_name"]
 
     # image_width and image_height must be an integer
     image_width = row["image_width"]
@@ -46,7 +46,7 @@ for annotation_id, row in df.iterrows():
     bbox = row["bbox"].split(",")
 
     # add a new image
-    coco_builder.add_image(image_id, image_name, image_width, image_height)
+    coco_builder.add_image(image_id, file_name, image_width, image_height)
 
     # add a new category
     coco_builder.add_category(category_id, category_name)
@@ -55,7 +55,7 @@ for annotation_id, row in df.iterrows():
     coco_builder.add_annotation(annotation_id, image_id, category_id, bbox, [], 0, 0)
 
 # add info
-coco_builder.add_info(2022, "v1.0", "Echo1")
+coco_builder.add_info(2022, "v1.0", "Echo1", "", "https://echo1.io")
 
 # print the data in the coco format as a python object
 print(coco_builder)
