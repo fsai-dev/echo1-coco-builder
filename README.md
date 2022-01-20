@@ -51,7 +51,7 @@ for annotation_id, row in df.iterrows():
     coco_builder.add_category(category_id, category_name)
 
     # add a new annotation
-    coco_builder.add_annotation(annotation_id, image_id, category_id, bbox, [], 0, 0, 0)
+    coco_builder.add_annotation(annotation_id, image_id, category_id, bbox, [], 0, 0)
 
 # add info
 coco_builder.add_info(2022, "v1.0", "Echo1")

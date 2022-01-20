@@ -32,7 +32,9 @@ class AnnotationSchema(Schema):
     image_id = fields.Int()
     category_id = fields.Int()
     bbox = fields.List(fields.Int)
-    segmentation = fields.List(fields.String)
+    segmentation = fields.List(fields.Int)
+    iscrowd = fields.Int()
+    area = fields.Float()
 
 
 class CocoSchema(Schema):
@@ -64,15 +66,12 @@ class CocoInfo:
 
 
 class CocoAnnotation:
-    def __init__(
-        self, id, image_id, category_id, bbox, segmentation, ignore, iscrowd, area
-    ):
+    def __init__(self, id, image_id, category_id, bbox, segmentation, iscrowd, area):
         self.id = id
         self.image_id = image_id
         self.category_id = category_id
         self.bbox = bbox
         self.segmentation = segmentation
-        self.ignore = ignore
         self.iscrowd = iscrowd
         self.area = area
 
@@ -85,10 +84,10 @@ class CocoGenerator:
         self.annotations = []
 
     def add_annotation(
-        self, id, image_id, category_id, bbox, segmentation, ignore, iscrowd, area
+        self, id, image_id, category_id, bbox, segmentation, iscrowd, area
     ):
         annotation = CocoAnnotation(
-            id, image_id, category_id, bbox, segmentation, ignore, iscrowd, area
+            id, image_id, category_id, bbox, segmentation, iscrowd, area
         )
         schema = AnnotationSchema()
         result = schema.dump(annotation)
