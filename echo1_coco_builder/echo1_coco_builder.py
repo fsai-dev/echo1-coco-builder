@@ -76,7 +76,7 @@ class CocoAnnotation:
         self.area = area
 
 
-class CocoGenerator:
+class CocoBuilder:
     def __init__(self):
         self.images = []
         self.categories = []

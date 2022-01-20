@@ -1,3 +1,6 @@
+## Introduction
+`echo1-coco-builder` provides a faster, safer way to build coco formatted data.
+
 ## Installation
 ```shell
 # If using pip
@@ -9,9 +12,8 @@ poetry add echo1-coco-builder
 
 ## Example use
 ```python
-import pandas as pd
-import re
-from echo1_coco_builder.echo1_coco_builder import CocoGenerator
+import pandas as pd, re
+from echo1_coco_builder.echo1_coco_builder import CocoBuilder
 
 def string_to_list_int(a_string, sep=","):
     return a_string.split(sep)
