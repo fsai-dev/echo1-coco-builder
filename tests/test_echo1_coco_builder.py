@@ -36,7 +36,7 @@ def test_builder():
         category_name = row["category_name"]
 
         # bbox format: [x,y,width,height]
-        bbox = string_to_list_int(row["bbox"])
+        bbox = row["bbox"].split(",")
 
         # add a new image
         coco_builder.add_image(image_id, image_name, image_width, image_height)

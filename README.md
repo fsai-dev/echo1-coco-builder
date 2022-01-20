@@ -14,11 +14,8 @@ poetry add echo1-coco-builder
 
 ## Example use
 ```python
-import pandas as pd, re
+import pandas as pd
 from echo1_coco_builder.echo1_coco_builder import CocoBuilder
-
-def string_to_list_int(a_string, sep=","):
-    return a_string.split(sep)
 
 # Open a CSV using pandas
 df = pd.read_csv("example.csv")
@@ -46,7 +43,7 @@ for annotation_id, row in df.iterrows():
     category_name = row["category_name"]
 
     # bbox format: [x,y,width,height]
-    bbox = string_to_list_int(row["img_coords"])
+    bbox = row["bbox"].split(",")
 
     # add a new image
     coco_builder.add_image(image_id, image_name, image_width, image_height)
@@ -60,10 +57,13 @@ for annotation_id, row in df.iterrows():
 # add info
 coco_builder.add_info(2022, "v1.0", "Echo1")
 
-# print the data in the coco format
+# print the data in the coco format as a python object
 print(coco_builder.get())
 
-# save the data in the coco format
+# print the data in the coco format as json
+print(coco_builder.get())
+
+# save the data in the coco format as json
 python_file = open("example-data.json", "w")
 python_file.write(coco_builder.get())
 python_file.close()
