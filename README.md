@@ -18,9 +18,9 @@ import pandas as pd
 from echo1_coco_builder.echo1_coco_builder import CocoBuilder
 
 # Open a CSV using pandas
-df = pd.read_csv("example.csv")
+df = pd.read_csv("test.csv")
 
-# Initialize the coco generator
+# Initialize the coco builder
 coco_builder = CocoBuilder()
 
 # For each row in the csv
