@@ -58,7 +58,7 @@ for annotation_id, row in df.iterrows():
 coco_builder.add_info(2022, "v1.0", "Echo1")
 
 # print the data in the coco format as a python object
-print(coco_builder.get())
+print(coco_builder)
 
 # print the data in the coco format as json
 print(coco_builder.get())
