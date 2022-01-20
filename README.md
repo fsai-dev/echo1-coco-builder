@@ -1,6 +1,8 @@
 ## Introduction
 `echo1-coco-builder` provides a faster, safer way to build coco formatted data.
 
+See: https://cocodataset.org/#format-data for more information
+
 ## Installation
 ```shell
 # If using pip
