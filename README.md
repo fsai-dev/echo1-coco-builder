@@ -27,7 +27,7 @@ coco_builder = CocoBuilder()
 for annotation_id, row in df.iterrows():
 
     # image_id must be an integer
-    image_id = int(re.sub("[^0-9]", "", row["image_name"]))
+    image_id = row["image_name"]
 
     # image_name must be a string
     image_name = row["image_name"]
