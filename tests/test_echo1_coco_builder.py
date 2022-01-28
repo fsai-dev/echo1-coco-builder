@@ -83,45 +83,48 @@ def test_builder():
             }
         )
 
-    # # add info
-    # coco_builder.add_info(
-    #     2022, "v1.0", "Echo1", "Contact for more info.", "https://echo1.io"
-    # )
+    # add info
+    coco_builder.add_info(
+        {
+            "year": 2022,
+            "version": "v1.0",
+            "contributor": "Echo1",
+            "description": "Contact for more info.",
+            "url": "https://echo1.io",
+        }
+    )
 
-    # # images assertion
-    # assert len(coco_builder.images) == 2
-    # for image in coco_builder.images:
-    #     assert type(image["id"]) is int
-    #     assert type(image["width"]) is int
-    #     assert type(image["height"]) is int
-    #     assert type(image["file_name"]) is str
-    #     assert type(image["license"]) is str
-    #     assert type(image["flickr_url"]) is str
-    #     assert type(image["coco_url"]) is str
+    # images assertion
+    assert len(coco_builder.images) == 2
+    for image in coco_builder.images:
+        assert type(image["id"]) is int
+        assert type(image["width"]) is int
+        assert type(image["height"]) is int
+        assert type(image["file_name"]) is str
 
-    # # annotations assertion
-    # assert len(coco_builder.annotations) == 5
-    # for annotation in coco_builder.annotations:
-    #     assert type(annotation["id"]) is int
-    #     assert type(annotation["image_id"]) is int
-    #     assert type(annotation["iscrowd"]) is int
-    #     assert type(annotation["area"]) is float
-    #     assert len(annotation["segmentation"]) == 1
+    # annotations assertion
+    assert len(coco_builder.annotations) == 5
+    for annotation in coco_builder.annotations:
+        assert type(annotation["id"]) is int
+        assert type(annotation["image_id"]) is int
+        assert type(annotation["iscrowd"]) is int
+        assert type(annotation["area"]) is float
+        assert len(annotation["segmentation"]) == 1
 
-    # # categories assertion
-    # assert len(coco_builder.categories) == 2
-    # for category in coco_builder.categories:
-    #     assert type(category["id"]) is int
-    #     assert type(category["name"]) is str
+    # categories assertion
+    assert len(coco_builder.categories) == 2
+    for category in coco_builder.categories:
+        assert type(category["id"]) is int
+        assert type(category["name"]) is str
 
-    # # info assertion
-    # assert type(coco_builder.info["year"]) is int
-    # assert coco_builder.info["year"] == 2022
-    # assert type(coco_builder.info["version"]) is str
-    # assert coco_builder.info["version"] == "v1.0"
-    # assert type(coco_builder.info["description"]) is str
-    # assert coco_builder.info["description"] == "Contact for more info."
-    # assert type(coco_builder.info["contributor"]) is str
-    # assert coco_builder.info["contributor"] == "Echo1"
-    # assert type(coco_builder.info["url"]) is str
-    # assert coco_builder.info["url"] == "https://echo1.io"
+    # info assertion
+    assert type(coco_builder.info["year"]) is int
+    assert coco_builder.info["year"] == 2022
+    assert type(coco_builder.info["version"]) is str
+    assert coco_builder.info["version"] == "v1.0"
+    assert type(coco_builder.info["description"]) is str
+    assert coco_builder.info["description"] == "Contact for more info."
+    assert type(coco_builder.info["contributor"]) is str
+    assert coco_builder.info["contributor"] == "Echo1"
+    assert type(coco_builder.info["url"]) is str
+    assert coco_builder.info["url"] == "https://echo1.io"
