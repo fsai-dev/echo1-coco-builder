@@ -36,7 +36,26 @@ def test_builder():
         category_name = row["category_name"]
 
         # bbox format: [x,y,width,height]
-        bbox = row["bbox"].split(",")
+        img_coords_str_list = row["bbox"].split(",")
+
+        x_min, y_min, x_max, y_max = map(int, img_coords_str_list)
+
+        bbox = [x_min, y_min, x_max - x_min, y_max - y_min]
+
+        area = (x_max - x_min) * (y_max - y_min)
+
+        segmentation = [
+            [
+                x_min,
+                y_min,
+                x_min,
+                (y_min + y_max),
+                (x_min + x_max),
+                (y_min + y_max),
+                (x_min + x_max),
+                y_min,
+            ]
+        ]
 
         # add a new image
         coco_builder.add_image(image_id, file_name, image_width, image_height, "MIT")
@@ -46,7 +65,7 @@ def test_builder():
 
         # add a new annotation
         coco_builder.add_annotation(
-            annotation_id, image_id, category_id, bbox, [], 0, 0
+            annotation_id, image_id, category_id, bbox, segmentation, 0, area
         )
 
     # add info
@@ -72,7 +91,7 @@ def test_builder():
         assert type(annotation["image_id"]) is int
         assert type(annotation["iscrowd"]) is int
         assert type(annotation["area"]) is float
-        assert len(annotation["segmentation"]) == 0
+        assert len(annotation["segmentation"]) == 1
 
     # categories assertion
     assert len(coco_builder.categories) == 2

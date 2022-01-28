@@ -33,7 +33,7 @@ class AnnotationSchema(Schema):
     image_id = fields.Int(required=True)
     category_id = fields.Int(required=True)
     bbox = fields.List(fields.Int)
-    segmentation = fields.List(fields.Int)
+    segmentation = fields.List(fields.List(fields.Int))
     iscrowd = fields.Int()
     area = fields.Float()
 
