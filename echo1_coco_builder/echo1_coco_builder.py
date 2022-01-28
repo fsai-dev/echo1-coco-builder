@@ -1,88 +1,17 @@
 from __future__ import annotations
+
+from .coco.CocoAnnotation import CocoAnnotation, CocoAnnotationSchema
+from .coco.CocoImage import CocoImage, CocoImageSchema
+from .coco.CocoInfo import CocoInfo, CocoInfoSchema
+from .coco.CocoCategory import CocoCategorySchema, CocoCategory
 from marshmallow import Schema, fields
 
 
-##########
-### Schema
-##########
-class ImageSchema(Schema):
-    id = fields.Int(required=True)
-    file_name = fields.Str(required=True)
-    width = fields.Int(required=True)
-    height = fields.Int(required=True)
-    license = fields.Str()
-    flickr_url = fields.Str()
-    coco_url = fields.Str()
-
-
-class CategorySchema(Schema):
-    id = fields.Int(required=True)
-    name = fields.Str(required=True)
-
-
-class InfoSchema(Schema):
-    year = fields.Int()
-    version = fields.Str()
-    contributor = fields.Str()
-    description = fields.Str()
-    url = fields.Str()
-
-
-class AnnotationSchema(Schema):
-    id = fields.Int(required=True)
-    image_id = fields.Int(required=True)
-    category_id = fields.Int(required=True)
-    bbox = fields.List(fields.Int)
-    segmentation = fields.List(fields.List(fields.Int))
-    iscrowd = fields.Int()
-    area = fields.Float()
-
-
 class CocoBuilderSchema(Schema):
-    info = fields.Nested(InfoSchema)
-    images = fields.List(fields.Nested(ImageSchema))
-    annotations = fields.List(fields.Nested(AnnotationSchema))
-    categories = fields.List(fields.Nested(CategorySchema))
-
-
-################
-### Coco Classes
-################
-class CocoImage:
-    def __init__(self, id, file_name, width, height, license, flickr_url, coco_url):
-        self.width = width
-        self.height = height
-        self.id = id
-        self.file_name = file_name
-        self.license = license
-        self.flickr_url = flickr_url
-        self.coco_url = coco_url
-
-
-class CocoCategory:
-    def __init__(self, id, name):
-        self.id = id
-        self.name = name
-
-
-class CocoInfo:
-    def __init__(self, year, version, contributor, description, url):
-        self.year = year
-        self.version = version
-        self.contributor = contributor
-        self.description = description
-        self.url = url
-
-
-class CocoAnnotation:
-    def __init__(self, id, image_id, category_id, bbox, segmentation, iscrowd, area):
-        self.id = id
-        self.image_id = image_id
-        self.category_id = category_id
-        self.bbox = bbox
-        self.segmentation = segmentation
-        self.iscrowd = iscrowd
-        self.area = area
+    info = fields.Nested(CocoInfoSchema)
+    images = fields.List(fields.Nested(CocoImageSchema))
+    annotations = fields.List(fields.Nested(CocoAnnotationSchema))
+    categories = fields.List(fields.Nested(CocoCategorySchema))
 
 
 class CocoBuilder:
@@ -92,24 +21,20 @@ class CocoBuilder:
         self.info = {}
         self.annotations = []
 
-    def add_annotation(
-        self, id, image_id, category_id, bbox, segmentation, iscrowd, area
-    ):
-        annotation = CocoAnnotation(
-            id, image_id, category_id, bbox, segmentation, iscrowd, area
-        )
-        schema = AnnotationSchema()
+    def add_annotation(self, data):
+        # Validate data against the schema
+        annotation = CocoAnnotation(data)
+        schema = CocoAnnotationSchema()
         result = schema.dump(annotation)
+        result = schema.load(result)
         self.annotations.append(result)
 
-    def add_image(
-        self, id, file_name, width, height, license="", flickr_url="", coco_url=""
-    ):
-
-        # Validate the image schema
-        image = CocoImage(id, file_name, width, height, license, flickr_url, coco_url)
-        schema = ImageSchema()
+    def add_image(self, data):
+        # Validate data against the schema
+        image = CocoImage(data)
+        schema = CocoImageSchema()
         result = schema.dump(image)
+        result = schema.load(result)
 
         # Skip if the image has been added already
         for added_image in self.images:
@@ -119,10 +44,12 @@ class CocoBuilder:
         # Add to the images list if it does not exist
         self.images.append(result)
 
-    def add_category(self, id, name):
-        category = CocoCategory(id, name)
-        schema = CategorySchema()
+    def add_category(self, data):
+        # Validate data against the schema
+        category = CocoCategory(data)
+        schema = CocoCategorySchema()
         result = schema.dump(category)
+        result = schema.load(result)
 
         # Skip if the category has been added already
         for added_category in self.categories:
@@ -132,10 +59,13 @@ class CocoBuilder:
         # Add to the categories list if it does not exist
         self.categories.append(result)
 
-    def add_info(self, year, version, contributor, description, url):
-        info = CocoInfo(year, version, contributor, description, url)
-        schema = InfoSchema()
+    def add_info(self, data):
+        # Validate data against the schema
+        info = CocoInfo(data)
+        schema = CocoInfoSchema()
         result = schema.dump(info)
+        result = schema.load(result)
+        # Add info to the object
         self.info = result
 
     def get(self):
