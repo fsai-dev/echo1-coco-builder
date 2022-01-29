@@ -73,7 +73,7 @@ def test_builder():
         # add a new annotation
         coco_builder.add_annotation(
             {
-                "id": annotation_id,
+                "id": row[0],
                 "image_id": image_id,
                 "category_id": category_id,
                 "bbox": bbox,
