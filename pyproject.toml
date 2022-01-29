@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "echo1-coco-builder"
-version = "0.1.6"
+version = "0.1.7"
 description = ""
 authors = ["Michael Mohamed <michael.mohamed@echo1.io>"]
 readme = "README.md"
