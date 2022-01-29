@@ -1,9 +1,11 @@
 ## Introduction
+
 `echo1-coco-builder` provides a faster, safer way to build coco formatted data.
 
 See: https://cocodataset.org/#format-data for more information
 
 ## Installation
+
 ```shell
 # If using pip
 pip install echo1-coco-builder
@@ -13,6 +15,7 @@ poetry add echo1-coco-builder
 ```
 
 ## Example use
+
 ```python
 import pandas as pd
 from echo1_coco_builder.echo1_coco_builder import CocoBuilder
@@ -46,16 +49,41 @@ for annotation_id, row in df.iterrows():
     bbox = row["bbox"].split(",")
 
     # add a new image
-    coco_builder.add_image(image_id, file_name, image_width, image_height)
+    coco_builder.add_image(
+        {
+            "id": image_id,
+            "file_name": file_name,
+            "width": image_width,
+            "height": image_height,
+        }
+    )
 
     # add a new category
-    coco_builder.add_category(category_id, category_name)
+    coco_builder.add_category({"id": category_id, "name": category_name})
 
     # add a new annotation
-    coco_builder.add_annotation(annotation_id, image_id, category_id, bbox, [], 0, 0)
+    coco_builder.add_annotation(
+        {
+            "id": annotation_id,
+            "image_id": image_id,
+            "category_id": category_id,
+            "bbox": bbox,
+            "segmentation": segmentation,
+            "iscrowd": 0,
+            "area": area,
+        }
+    )
 
 # add info
-coco_builder.add_info(2022, "v1.0", "Echo1", "", "https://echo1.io")
+coco_builder.add_info(
+    {
+        "year": 2022,
+        "version": "v1.0",
+        "contributor": "Echo1",
+        "description": "Contact for more info.",
+        "url": "https://echo1.io",
+    }
+)
 
 # print the data in the coco format as a python object
 print(coco_builder)
