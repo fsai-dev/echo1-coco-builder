@@ -11,14 +11,14 @@ from loguru import logger
 clamp = lambda n, minn, maxn: max(min(maxn, n), minn)
 
 
-class CocoBuilderSchema(Schema):
+class CocoAnnotationsBuilderSchema(Schema):
     info = fields.Nested(CocoInfoSchema)
     images = fields.List(fields.Nested(CocoImageSchema))
     annotations = fields.List(fields.Nested(CocoAnnotationSchema))
     categories = fields.List(fields.Nested(CocoCategorySchema))
 
 
-class CocoBuilder:
+class CocoAnnotationsBuilder:
     def __init__(self):
         self.__annotations = {}
         self.__images = {}
@@ -143,7 +143,7 @@ class CocoBuilder:
         self.info = result
 
     def get(self):
-        schema = CocoBuilderSchema()
+        schema = CocoAnnotationsBuilderSchema()
         return schema.dumps(self)
 
     def __str__(self):

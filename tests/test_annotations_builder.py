@@ -1,6 +1,4 @@
-from echo1_coco_builder import __version__
-from echo1_coco_builder import __version__
-from echo1_coco_builder.echo1_coco_builder import CocoBuilder
+from echo1_coco_builder.annotations_builder import CocoAnnotationsBuilder
 import pandas as pd, re
 
 
@@ -8,13 +6,13 @@ def string_to_list_int(a_string, sep=","):
     return a_string.split(sep)
 
 
-def test_builder():
+def test_annotations_builder():
 
     # Open a CSV using pandas
-    df = pd.read_csv("test.csv")
+    df = pd.read_csv("./tests/data/test.csv")
 
     # Initialize the coco generator
-    coco_builder = CocoBuilder()
+    anno_builder = CocoAnnotationsBuilder()
 
     # For each row in the csv
     for annotation_id, row in df.iterrows():
@@ -58,7 +56,7 @@ def test_builder():
         ]
 
         # add a new image
-        coco_builder.add_image(
+        anno_builder.add_image(
             {
                 "id": image_id,
                 "file_name": file_name,
@@ -68,10 +66,10 @@ def test_builder():
         )
 
         # add a new category
-        coco_builder.add_category({"id": category_id, "name": category_name})
+        anno_builder.add_category({"id": category_id, "name": category_name})
 
         # add a new annotation
-        coco_builder.add_annotation(
+        anno_builder.add_annotation(
             {
                 "id": row[0],
                 "image_id": image_id,
@@ -84,7 +82,7 @@ def test_builder():
         )
 
     # add info
-    coco_builder.add_info(
+    anno_builder.add_info(
         {
             "year": 2022,
             "version": "v1.0",
@@ -95,16 +93,16 @@ def test_builder():
     )
 
     # images assertion
-    assert len(coco_builder.images) == 2
-    for image in coco_builder.images:
+    assert len(anno_builder.images) == 2
+    for image in anno_builder.images:
         assert type(image["id"]) is int
         assert type(image["width"]) is int
         assert type(image["height"]) is int
         assert type(image["file_name"]) is str
 
     # annotations assertion
-    assert len(coco_builder.annotations) == 5
-    for annotation in coco_builder.annotations:
+    assert len(anno_builder.annotations) == 5
+    for annotation in anno_builder.annotations:
         assert type(annotation["id"]) is int
         assert type(annotation["image_id"]) is int
         assert type(annotation["iscrowd"]) is int
@@ -112,19 +110,19 @@ def test_builder():
         assert len(annotation["segmentation"]) == 1
 
     # categories assertion
-    assert len(coco_builder.categories) == 2
-    for category in coco_builder.categories:
+    assert len(anno_builder.categories) == 2
+    for category in anno_builder.categories:
         assert type(category["id"]) is int
         assert type(category["name"]) is str
 
     # info assertion
-    assert type(coco_builder.info["year"]) is int
-    assert coco_builder.info["year"] == 2022
-    assert type(coco_builder.info["version"]) is str
-    assert coco_builder.info["version"] == "v1.0"
-    assert type(coco_builder.info["description"]) is str
-    assert coco_builder.info["description"] == "Contact for more info."
-    assert type(coco_builder.info["contributor"]) is str
-    assert coco_builder.info["contributor"] == "Echo1"
-    assert type(coco_builder.info["url"]) is str
-    assert coco_builder.info["url"] == "https://echo1.io"
+    assert type(anno_builder.info["year"]) is int
+    assert anno_builder.info["year"] == 2022
+    assert type(anno_builder.info["version"]) is str
+    assert anno_builder.info["version"] == "v1.0"
+    assert type(anno_builder.info["description"]) is str
+    assert anno_builder.info["description"] == "Contact for more info."
+    assert type(anno_builder.info["contributor"]) is str
+    assert anno_builder.info["contributor"] == "Echo1"
+    assert type(anno_builder.info["url"]) is str
+    assert anno_builder.info["url"] == "https://echo1.io"
