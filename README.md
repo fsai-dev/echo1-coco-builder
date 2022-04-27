@@ -14,17 +14,17 @@ pip install echo1-coco-builder
 poetry add echo1-coco-builder
 ```
 
-## Example use
+## Example use (building coco annotations)
 
 ```python
 import pandas as pd
-from echo1_coco_builder.echo1_coco_builder import CocoBuilder
+from echo1_coco_builder.annotations_builder import CocoAnnotationsBuilder
 
 # Open a CSV using pandas
-df = pd.read_csv("test.csv")
+df = pd.read_csv("./tests/data/test.csv")
 
 # Initialize the coco builder
-coco_builder = CocoBuilder()
+coco_builder = CocoAnnotationsBuilder()
 
 # For each row in the csv
 for annotation_id, row in df.iterrows():
@@ -95,4 +95,33 @@ print(coco_builder.get())
 python_file = open("example-data.json", "w")
 python_file.write(coco_builder.get())
 python_file.close()
+```
+
+
+## Example use (building coco results)
+
+```python
+from echo1_coco_builder.results_builder import CocoResultsBuilder
+
+
+# Initialize the coco generator
+results_builder = CocoResultsBuilder()
+results_builder.add_result(
+    {
+        "image_id": 1,
+        "bbox": [490, 365, 14, 26],
+        "score": 0.8559583425521851,
+        "category_id": 1,
+        "category_name": "My Category",
+        "segmentation": [],
+        "iscrowd": 0,
+        "area": 364,
+    }
+)
+
+# print the data in the coco results format as a python object
+print(results_builder)
+
+# print the data in the coco results format as json
+print(results_builder.get())
 ```
